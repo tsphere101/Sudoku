@@ -1,4 +1,4 @@
-# Sudoku NxN
+# Sudoku NxN Solver and Generator
 
 ## 1. Generator
 ### Input
