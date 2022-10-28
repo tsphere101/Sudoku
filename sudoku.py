@@ -1,4 +1,4 @@
-from generator import Generator
+from generator.generator import Generator
 from board.board import SudokuBoard
 
 # Game class
