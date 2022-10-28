@@ -1,4 +1,4 @@
-class TableException:
+class BoardException:
     @staticmethod
     def size_undefined():
         raise ValueError("Size of table is undefined.")
@@ -21,4 +21,4 @@ class TableException:
 
     @staticmethod
     def size_invalid(s):
-        raise ValueError(f"{s}is invalid board size.")
+        raise ValueError(f"{s} is invalid board size.")

@@ -1,8 +1,8 @@
 import math
-from table.table_exception import TableException
+from board.board_exception import BoardException
 
 
-class SudokuTable:
+class SudokuBoard:
     def __init__(self, size=None, data=None):
 
         if data is not None:
@@ -16,10 +16,10 @@ class SudokuTable:
             return
 
         if size <= 1:
-            TableException.size_invalid(size)
+            BoardException.size_invalid(size)
 
-        if size is not self._valid_board_size(size):
-            TableException.size_invalid(size)
+        if not self._valid_board_size(size):
+            BoardException.size_invalid(size)
 
         self.size(size)._construct_table()
 
@@ -28,11 +28,11 @@ class SudokuTable:
         s = len(data)
         for row in data:
             if len(row) != s:
-                TableException.non_square()
+                BoardException.non_square()
 
 
         # Parse data to table
-        table = SudokuTable(size=s)
+        table = SudokuBoard(size=s)
         for i in range(s):
             for j in range(s):
                 table[i, j] = data[i][j]
@@ -47,7 +47,7 @@ class SudokuTable:
             return None
 
         if hasattr(self, '_size'):
-            TableException.size_already_defined()
+            BoardException.size_already_defined()
 
         return self._set_size(s)
 
@@ -55,7 +55,7 @@ class SudokuTable:
         # Construct 2D list size of NxN
 
         if self._size is None:
-            TableException.size_undefined()
+            BoardException.size_undefined()
 
         size = self._size
 
@@ -70,22 +70,24 @@ class SudokuTable:
 
     def _set_size(self, s):
         if s < 2:
-            TableException.size_invalid(s)
+            BoardException.size_invalid(s)
         self._size = s
         return self
 
     def _check_index_out_of_bound(self, cell):
         if cell[0] >= self.size() or cell[1] >= self.size():
-            TableException.index_out_of_bound(cell)
+            BoardException.index_out_of_bound(cell)
 
     def _valid_board_size(self, s:int):
+        if s == 2:
+            return True
         return math.sqrt(s) == math.floor(math.sqrt(s))
 
     def __str__(self) -> str:
         s = ""
 
         if self.size() is None:
-            return "[" + "Empty table" + "]"
+            return "[" + "Empty board" + "]"
 
         return "\n".join(str(row) for row in self._table)
 
@@ -117,7 +119,7 @@ class SudokuTable:
 
     def clone(self):
         s = self.size()
-        new_table = SudokuTable()
+        new_table = SudokuBoard()
         new_table.size(s)
         for i in range(s):
             for j in range(s):

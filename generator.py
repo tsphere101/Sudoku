@@ -1,4 +1,4 @@
-from table.table import SudokuTable
+from board.board import SudokuBoard
 import random
 
 
@@ -25,7 +25,7 @@ class Generator:
     def _bernoulli(self, p: float, k: int = 1):
         return random.choices([1, 0], weights=[p, 1-p], k=k)
 
-    def generate(self, size: int = None) -> SudokuTable:
+    def generate(self, size: int = None) -> SudokuBoard:
         # """
         # Generate random Sudoku table with the specified table size
 
@@ -45,7 +45,7 @@ class Generator:
 
         s = size if size is not None else self.size
 
-        table = SudokuTable(size=s)
+        table = SudokuBoard(size=s)
 
         for i in range(table.size()):
             for j in range(table.size()):

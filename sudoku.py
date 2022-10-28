@@ -1,11 +1,11 @@
 from generator import Generator
-from table.table import SudokuTable
+from board.board import SudokuBoard
 
 # Game class
 class Sudoku:
     def __init__(self,size = None) -> None:
-        self.table = SudokuTable(size)
+        self.board = SudokuBoard(size)
 
-    def generate(self,table_size):
+    def generate(self,board_size):
         gen = Generator()
-        return gen.generate(table_size)
+        return gen.generate(board_size)
