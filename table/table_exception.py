@@ -18,3 +18,7 @@ class TableException:
     @staticmethod
     def non_square():
         raise ValueError("Matrix shape must be square.")
+
+    @staticmethod
+    def size_invalid(s):
+        raise ValueError(f"{s}is invalid board size.")

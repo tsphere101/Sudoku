@@ -1,3 +1,4 @@
+import math
 from table.table_exception import TableException
 
 
@@ -15,7 +16,10 @@ class SudokuTable:
             return
 
         if size <= 1:
-            raise ValueError("Invalid size, table size must be greater than 1")
+            TableException.size_invalid(size)
+
+        if size is not self._valid_board_size(size):
+            TableException.size_invalid(size)
 
         self.size(size)._construct_table()
 
@@ -73,6 +77,9 @@ class SudokuTable:
     def _check_index_out_of_bound(self, cell):
         if cell[0] >= self.size() or cell[1] >= self.size():
             TableException.index_out_of_bound(cell)
+
+    def _valid_board_size(self, s:int):
+        return math.sqrt(s) == math.floor(math.sqrt(s))
 
     def __str__(self) -> str:
         s = ""

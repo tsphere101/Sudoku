@@ -8,4 +8,5 @@ data = [[1,None],[None,4]]
 s = Sudoku()
 table = SudokuTable(data=data)
 
+
 print(table)
