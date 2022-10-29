@@ -1,3 +1,4 @@
+from __future__ import division
 import math
 from board.board_exception import BoardException
 
@@ -23,22 +24,20 @@ class SudokuBoard:
 
         self.size(size)._construct_table()
 
-    def read_matrix(self,data):
+    def read_matrix(self, data):
         # Check if data is square matrix
         s = len(data)
         for row in data:
             if len(row) != s:
                 BoardException.non_square()
 
-
         # Parse data to table
         table = SudokuBoard(size=s)
         for i in range(s):
             for j in range(s):
                 table[i, j] = data[i][j]
-        
+
         return table
-        
 
     def size(self, s=None) -> object:
         if s is None:
@@ -50,6 +49,44 @@ class SudokuBoard:
             BoardException.size_already_defined()
 
         return self._set_size(s)
+
+    def row(self, r):
+        return self._table[r]
+
+    def col(self, c):
+        l = list()
+        for i in range(self.size()):
+            l.append(self[i, c])
+        return l
+
+    def box(self, cell: tuple) -> list:
+        """calculate and return all element in the box that the specified cell is in.
+
+        Returns:
+            list : element those are inside the box
+        """
+        try:
+            row, col = cell
+        except (ValueError, TypeError) as e:
+            raise e
+
+        s = self.size()
+        division = 2 if s % 2 == 0 else 3
+        box_size = s // division
+        r_boxth = row // division
+        r_box_lower = r_boxth * box_size  # include
+        r_box_upper = (r_boxth+1) * box_size  # exclude
+
+        c_boxth = col // division
+        c_box_lower = c_boxth * box_size  # include
+        c_box_upper = (c_boxth + 1) * box_size  # exclude
+
+        element = list()
+        for r in range(r_box_lower, r_box_upper):
+            for c in range(c_box_lower, c_box_upper):
+                element.append(self[r, c])
+
+        return element
 
     def _construct_table(self):
         # Construct 2D list size of NxN
@@ -78,7 +115,7 @@ class SudokuBoard:
         if cell[0] >= self.size() or cell[1] >= self.size():
             BoardException.index_out_of_bound(cell)
 
-    def _valid_board_size(self, s:int):
+    def _valid_board_size(self, s: int):
         if s == 2:
             return True
         return math.sqrt(s) == math.floor(math.sqrt(s))
@@ -107,15 +144,6 @@ class SudokuBoard:
         for i in range(self.size()):
             for j in range(self.size()):
                 yield self[i, j]
-
-    def row(self, r):
-        return self._table[r]
-
-    def col(self, c):
-        l = list()
-        for i in range(self.size()):
-            l.append(self[i, c])
-        return l
 
     def clone(self):
         s = self.size()

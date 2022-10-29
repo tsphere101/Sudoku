@@ -8,15 +8,15 @@ class Generator:
         self.size = size
 
     def difficulty(self, level: float = 0.0) -> object:
-        # """
-        # Set the difficulty level of the Sudoku table that will be generated.
+        """
+        Set the difficulty level of the Sudoku table that will be generated.
 
-        # Args:
-        #     level (float, optional): Value between 0 to 1. Defaults to 0.
+        Args:
+            level (float, optional): Value between 0 to 1. Defaults to 0.
 
-        # Returns:
-        #     Generator: self
-        # """
+        Returns:
+            Generator: self
+        """
 
         self._diff = level
 
