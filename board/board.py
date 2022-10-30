@@ -59,6 +59,13 @@ class SudokuBoard:
             l.append(self[i, c])
         return l
 
+    def undone_cell(self) -> Cell:
+        s = self.size()
+        for i in range(s):
+            for j in range(s):
+                if self[i,j] is None:
+                    return i,j
+
     def box(self, cell: tuple) -> list:
         """calculate and return all element in the box that the specified cell is in.
 
