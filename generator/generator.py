@@ -26,19 +26,19 @@ class Generator:
         return random.choices([1, 0], weights=[p, 1-p], k=k)
 
     def generate(self, size: int = None) -> SudokuBoard:
-        # """
-        # Generate random Sudoku table with the specified table size
+        """
+        Generate random Sudoku table with the specified table size
 
-        # Args:
-        #     size (int, optional): table size. Defaults to None.
+        Args:
+            size (int, optional): table size. Defaults to None.
 
-        # Raises:
-        #     ValueError: If size is not specified
+        Raises:
+            ValueError: If size is not specified
 
-        # Returns:
-        #     SudokuTable: Incomplete Sudoku table.
+        Returns:
+            SudokuTable: Incomplete Sudoku table.
 
-        # """
+        """
 
         if (size is None) and (self.size is None):
             raise ValueError("Generator size undefined")
