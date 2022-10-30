@@ -1,13 +1,13 @@
-from __future__ import division
 import math
 from board.board_exception import BoardException
+from board.cell import Cell
+from typing import List
 
 
 class SudokuBoard:
-    def __init__(self, size=None, data=None):
+    def __init__(self, size: int = None, data: List[List] = None):
 
         if data is not None:
-            # print(type(self.read_matrix(data)))
             read_matrix = self.read_matrix(data)
             self.size(read_matrix.size())._construct_table()
             self._table = read_matrix._table
@@ -35,7 +35,7 @@ class SudokuBoard:
         table = SudokuBoard(size=s)
         for i in range(s):
             for j in range(s):
-                table[i, j] = data[i][j]
+                table[i, j] = Cell(data[i][j], (i, j), self)
 
         return table
 
@@ -53,29 +53,35 @@ class SudokuBoard:
     def row(self, r):
         return self._table[r]
 
-    def col(self, c):
+    def column(self, c):
         l = list()
         for i in range(self.size()):
             l.append(self[i, c])
         return l
 
-    def undone_cell(self) -> Cell:
+    def put(self, cell: Cell) -> object:
+        if not self[cell.position].is_empty():
+            raise ValueError('Cell occupied')
+        self[cell.position] = cell
+        return self
+
+    def undone_cells(self) -> List[Cell]:
         s = self.size()
+        cells = []
         for i in range(s):
             for j in range(s):
-                if self[i,j] is None:
-                    return i,j
+                if self[i, j].is_empty():
+                    cells.append(self[i, j])
+        return cells
 
-    def box(self, cell: tuple) -> list:
+    def box(self, cell: Cell) -> list:
         """calculate and return all element in the box that the specified cell is in.
 
         Returns:
             list : element those are inside the box
         """
-        try:
-            row, col = cell
-        except (ValueError, TypeError) as e:
-            raise e
+        row = cell.row
+        col = cell.column
 
         s = self.size()
         division = 2 if s % 2 == 0 else 3
@@ -107,7 +113,7 @@ class SudokuBoard:
         for i in range(size):
             inner_list = list()
             for j in range(size):
-                inner_list.append(None)
+                inner_list.append(Cell(None, (i, j), self))
             self._table.append(inner_list)
 
         return self
@@ -116,7 +122,7 @@ class SudokuBoard:
         if s < 2:
             BoardException.size_invalid(s)
         self._size = s
-        return self
+        return self._construct_table()
 
     def _check_index_out_of_bound(self, cell):
         if cell[0] >= self.size() or cell[1] >= self.size():
@@ -128,24 +134,22 @@ class SudokuBoard:
         return math.sqrt(s) == math.floor(math.sqrt(s))
 
     def __str__(self) -> str:
-        s = ""
-
         if self.size() is None:
             return "[" + "Empty board" + "]"
 
         return "\n".join(str(row) for row in self._table)
 
-    def __getitem__(self, cell):
+    def __getitem__(self, position):
 
-        self._check_index_out_of_bound(cell)
+        self._check_index_out_of_bound(position)
 
-        return self._table[cell[0]][cell[1]]
+        return self._table[position[0]][position[1]]
 
-    def __setitem__(self, cell, value):
+    def __setitem__(self, position, value):
 
-        self._check_index_out_of_bound(cell)
+        self._check_index_out_of_bound(position)
 
-        self._table[cell[0]][cell[1]] = value
+        self._table[position[0]][position[1]] = value
 
     def __iter__(self):
         for i in range(self.size()):
@@ -154,9 +158,9 @@ class SudokuBoard:
 
     def clone(self):
         s = self.size()
-        new_table = SudokuBoard()
-        new_table.size(s)
+        new_board = SudokuBoard()
+        new_board.size(s)
         for i in range(s):
             for j in range(s):
-                new_table[i][j] = self[i][j]
-        return new_table
+                new_board[i, j] = Cell(self[i, j].value, (i, j), new_board)
+        return new_board
