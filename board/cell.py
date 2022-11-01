@@ -23,7 +23,7 @@ class Cell:
         pass
 
     def is_empty(self):
-        return self.value is None
+        return self.value == None
 
     def box(self) -> list:
         """Get all element in the box that the cell in.
@@ -55,6 +55,9 @@ class Cell:
         return element
 
     def __repr__(self) -> str:
+        return str(self.value)
+
+    def __str__(self)->str:
         return str(self.value)
 
     def __hash__(self) -> int:

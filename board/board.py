@@ -9,7 +9,7 @@ class SudokuBoard:
 
         if data is not None:
             read_matrix = self.read_matrix(data)
-            self.size(read_matrix.size())._construct_table()
+            self.size(read_matrix.size())
             self._table = read_matrix._table
             return
 
@@ -35,7 +35,7 @@ class SudokuBoard:
         table = SudokuBoard(size=s)
         for i in range(s):
             for j in range(s):
-                table[i, j] = Cell(data[i][j], (i, j), self)
+                table[i, j] = data[i][j]
 
         return table
 
@@ -51,7 +51,10 @@ class SudokuBoard:
         return self._set_size(s)
 
     def row(self, r):
-        return self._table[r]
+        l = list()
+        for i in range(self.size()):
+            l.append(self[r,i])
+        return l
 
     def column(self, c):
         l = list()
@@ -62,7 +65,7 @@ class SudokuBoard:
     def put(self, cell: Cell) -> object:
         if not self[cell.position].is_empty():
             raise ValueError('Cell occupied')
-        self[cell.position] = cell
+        self[cell.position] = cell.value
         return self
 
     def is_complete(self) -> bool:
@@ -80,7 +83,7 @@ class SudokuBoard:
                     cells.append(self[i, j])
         return cells
 
-    def box(self, cell: Cell) -> list:
+    def box(self, cell: Cell) -> List[Cell]:
         """calculate and return all element in the box that the specified cell is in.
 
         Returns:
@@ -143,6 +146,7 @@ class SudokuBoard:
         if self.size() is None:
             return "[" + "Empty board" + "]"
 
+
         return "\n".join(str(row) for row in self._table)
 
     def __getitem__(self, position):
@@ -151,11 +155,11 @@ class SudokuBoard:
 
         return self._table[position[0]][position[1]]
 
-    def __setitem__(self, position, value):
+    def __setitem__(self, position, obj):
 
         self._check_index_out_of_bound(position)
 
-        self._table[position[0]][position[1]] = value
+        self._table[position[0]][position[1]].value = obj
 
     def __iter__(self):
         for i in range(self.size()):
@@ -168,5 +172,6 @@ class SudokuBoard:
         new_board.size(s)
         for i in range(s):
             for j in range(s):
-                new_board[i, j] = Cell(self[i, j].value, (i, j), new_board)
+                new_board[i,j] = self[i,j].value
+                # new_board[i, j] = Cell(self[i, j].value, (i, j), new_board)
         return new_board
