@@ -65,6 +65,12 @@ class SudokuBoard:
         self[cell.position] = cell
         return self
 
+    def is_complete(self) -> bool:
+        for cell in self:
+            if cell.is_empty():
+                return False
+        return True
+
     def undone_cells(self) -> List[Cell]:
         s = self.size()
         cells = []
