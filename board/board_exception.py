@@ -1,15 +1,15 @@
 class BoardException:
     @staticmethod
     def size_undefined():
-        raise ValueError("Size of table is undefined.")
+        raise SizeUndefinedError("Size of table is undefined.")
 
     @staticmethod
     def size_already_defined():
-        raise ValueError("Size of table is already defined.")
+        raise SizeAlreadyDefinedError("Size of table is already defined")
 
     @staticmethod
     def size_invalid(s):
-        raise ValueError(f"{s} is invalid table size.")
+        raise SizeInvalidError(f"{s} is invalid table size.")
 
     @staticmethod
     def index_out_of_bound(index):
@@ -17,8 +17,20 @@ class BoardException:
 
     @staticmethod
     def non_square():
-        raise ValueError("Matrix shape must be square.")
+        raise BoardShapeError("Matrix shape must be square.")
 
-    @staticmethod
-    def size_invalid(s):
-        raise ValueError(f"{s} is invalid board size.")
+class SizeUndefinedError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+class SizeAlreadyDefinedError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+class SizeInvalidError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+class BoardShapeError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
